@@ -39,6 +39,20 @@ if (TEXT.startsWith("\n") || TEXT.endsWith("\n")) {
   console.error("entry.txt must not start or end with a blank line");
   process.exit(1);
 }
+// Shape guard: the text should read as a short piece in three movements,
+// not one unbroken wall. A single paragraph would rush the judge; three
+// give the reading room to slow down between them.
+const paragraphs = TEXT.split("\n\n");
+if (paragraphs.length !== 3) {
+  console.error("entry.txt should hold exactly three paragraphs");
+  process.exit(1);
+}
+for (const p of paragraphs) {
+  if (p.trim().length === 0) {
+    console.error("entry.txt has an empty paragraph");
+    process.exit(1);
+  }
+}
 
 mkdirSync(outDir, { recursive: true });
 writeFileSync(outFile, TEXT, "utf8");
